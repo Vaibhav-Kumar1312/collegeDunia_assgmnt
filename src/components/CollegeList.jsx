@@ -6,6 +6,7 @@ import CourseFees from "./TableData/CourseFees.jsx";
 import Placement from "./TableData/Placement.jsx";
 import UserReviews from "./TableData/UserReviews.jsx";
 import Ranking from "./TableData/Ranking.jsx";
+// import CircularProgress from "@mui/material/CircularProgress";
 
 const TableData = styled("td")({
   border: "1px solid blue",
@@ -14,9 +15,9 @@ const TableData = styled("td")({
 export default function CollegeList({ allCllgData }) {
   return (
     <tbody>
-      {allCllgData.map((cllgData) => {
+      {allCllgData.map((index, cllgData) => {
         return (
-          <tr key={cllgData.id}>
+          <tr key={index}>
             <TableData>
               <CDrank cdRank={cllgData.cdRank} />
             </TableData>

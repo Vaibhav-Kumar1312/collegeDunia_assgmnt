@@ -3,8 +3,12 @@ import TableHeadings from "./TableHeadings.jsx";
 import CollegeList from "./CollegeList.jsx";
 import DUMMY_DATA from "../../DUMMY_JSON.js";
 import { useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import { Button } from "@mui/material";
 
-let AllCollgData = [];
+// import InfiniteScroll from "react-infinite-scroll-component";
+
+// let allCllgs = [...DUMMY_DATA];
 
 const Wrapper = styled("table")({
   width: "100%",
@@ -13,10 +17,10 @@ const Wrapper = styled("table")({
 });
 
 const Input = styled("input")({
-  width: "500px",
+  width: "50vw",
   height: "30px",
   padding: "6px 20px",
-  margin: "40px auto",
+  margin: " 20px auto",
   borderRadius: "20px",
   outline: "none",
   border: "0.5px solid lightgrey",
@@ -25,18 +29,49 @@ const Input = styled("input")({
 });
 
 export default function AllColleges() {
+  const [allClgs, setAllClgs] = useState([...DUMMY_DATA]);
   const [searchValue, setSearchValue] = useState("");
   function handleChange(event) {
     setSearchValue(event.target.value);
-    AllCollgData = DUMMY_DATA.filter((item) => {
-      console.log(item.collegeName.includes(searchValue));
-      return item.collegeName.includes(searchValue);
-    });
-    console.log(AllCollgData);
   }
-  // function searchCollege(){
-  //   const filteredData = DUMMY_DATA.filter((item)=>item.collegeName.includes(searchValue))
-  // }
+  function searchCollege() {
+    setAllClgs([]);
+    let arr = [];
+    DUMMY_DATA.forEach((item) => {
+      if (
+        item.collegeName.toLocaleLowerCase().includes(searchValue.toLowerCase())
+      ) {
+        arr.push(item);
+      }
+    });
+    setAllClgs(arr);
+  }
+
+  function handleSort(identifier) {
+    let data = [...allClgs];
+    data.sort((a, b) => {
+      let fa = a[identifier];
+      let fb = b[identifier];
+      if (fa > fb) {
+        return 1;
+      }
+      if (fa < fb) {
+        return -1;
+      }
+    });
+    setAllClgs(data);
+  }
+
+  // const [hasMore, setHasMore] = useState(true);
+
+  // const fetchMoreData = () => {
+  //   setTimeout(() => {
+  //     setAllClgs((prevValue) => {
+  //       return prevValue.concat(DUMMY_DATA);
+  //     });
+  //     setHasMore(true);
+  //   }, 1000);
+  // };
 
   return (
     <>
@@ -46,9 +81,19 @@ export default function AllColleges() {
         placeholder="Serach By College name......"
         value={searchValue}
       />
+      <Button sx={{ borderRadius: "20px" }} onClick={searchCollege}>
+        <SearchIcon sx={{ fontSize: "38px" }} />
+      </Button>
       <Wrapper>
-        <TableHeadings />
-        <CollegeList allCllgData={AllCollgData} />
+        <TableHeadings toSort={handleSort} />
+        {/* <InfiniteScroll
+          dataLength={allClgs.length}
+          next={fetchMoreData}
+          hasMore={hasMore}
+          loader={<h1>Loading....</h1>}
+        > */}
+        <CollegeList allCllgData={allClgs} />
+        {/* </InfiniteScroll> */}
       </Wrapper>
     </>
   );
