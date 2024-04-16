@@ -15,7 +15,7 @@ const TableData = styled("td")({
 export default function CollegeList({ allCllgData }) {
   return (
     <tbody>
-      {allCllgData.map((index, cllgData) => {
+      {allCllgData.map((cllgData, index) => {
         return (
           <tr key={index}>
             <TableData>
